@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Styles from "./Layout";
+//import SearchBar from "./SearchBar";
+import React from "react";
 
-const Listagem = () => {
+const Teste2 = () => {
+  const { search, setSearch } = React.useState("");
+
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
@@ -14,9 +18,11 @@ const Listagem = () => {
         console.error(error);
       });
   }, []);
-
+  console.log(search);
   return (
     <Styles>
+      {/* <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} /> */}
+      <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} />
       <div>
         <h1>Lista</h1>
         <div>
@@ -34,4 +40,4 @@ const Listagem = () => {
   );
 };
 
-export default Listagem;
+export default Teste2;

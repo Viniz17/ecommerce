@@ -1,13 +1,14 @@
 import "./App.css";
-import { Link } from "react-router-dom";
+import Listagem from "./pages/Listagem";
+import { AuthProvider } from "./contexts/auth";
 import "./main.jsx";
 
 function App() {
   return (
     <>
-      <h2>oioi</h2>
-      <Link to="/login">Login</Link>
-      <Link to="/cadastro">Cadastro</Link>
+      <AuthProvider>
+        <Listagem />
+      </AuthProvider>
     </>
   );
 }

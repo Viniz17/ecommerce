@@ -37,7 +37,7 @@ const Cadastro = () => {
   };
 
   return (
-    <Form
+  <Form
       {...formItemLayout}
       form={form}
       name="register"
@@ -47,6 +47,8 @@ const Cadastro = () => {
       }}
       scrollToFirstError
     >
+        
+   
       <Form.Item
         name="Nome de usuário"
         label="Usuário"
@@ -140,6 +142,8 @@ const Cadastro = () => {
         </Button>
       </Form.Item>
     </Form>
+     
+     
   );
 };
 export default Cadastro;

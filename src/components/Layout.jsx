@@ -1,7 +1,7 @@
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 const { Header, Content, Footer } = Layout;
 
-const Styles = ({ children }) => {
+const layout = ({ children }) => {
   // const menu = [{nome: 'Teste', rota: '/teste'}]
 
   const {
@@ -21,20 +21,8 @@ const Styles = ({ children }) => {
         }}
       >
         <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          // items={menu.map((opcao) => ({
-          //   key: opcao.nome,
-          //   label: opcao.nome,
-          // }))}
-
-          items={new Array(3).fill(null).map((_, index) => ({
-            key: String(index + 1),
-            label: `nav ${index + 1}`,
-          }))}
-        />
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]} />
+    
       </Header>
       <Content
         className="site-layout"
@@ -66,9 +54,9 @@ const Styles = ({ children }) => {
           textAlign: "center",
         }}
       >
-        Ant Design ©2023 Created by Ant UED
+        Trabalho Final de React - Vamo com TUDO!!!
       </Footer>
     </Layout>
   );
 };
-export default Styles;
+export default layout;

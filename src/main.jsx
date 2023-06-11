@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Cadastro from "./pages/Cadastro.jsx";
@@ -8,10 +7,16 @@ import Listagem from "./pages/Listagem.jsx";
 import Carrinho from "./pages/Carrinho.jsx";
 import Produto from "./pages/Produto.jsx";
 import Teste from "./pages/Teste";
+import Teste2 from "./pages/Teste2.jsx";
+import App from "./App.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <App />,
+  },
+  {
+    path: "*",
     element: <App />,
   },
   {
@@ -37,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "teste",
     element: <Teste />,
+  },
+  {
+    path: "teste2",
+    element: <Teste2 />,
   },
 ]);
 
