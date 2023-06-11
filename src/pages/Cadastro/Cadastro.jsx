@@ -1,4 +1,5 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
+import { useState } from "react";
 
 const formItemLayout = {
   labelCol: {
@@ -32,12 +33,28 @@ const tailFormItemLayout = {
 };
 const Cadastro = () => {
   const [form] = Form.useForm();
+  const [nome, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const armazenar = (chave, valor) => {
+    localStorage.setItem(chave, valor);
+  };
+  // const consultar = (chave) => {
+  //   alert(localStorage.getItem(chave));
+  // };
+
+  // const apagar = (chave) => {
+  //   localStorage.removeItem(chave);
+  // };
+
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
+    alert("Usuário cadastrado com sucesso!");
   };
 
   return (
-  <Form
+    <Form
       {...formItemLayout}
       form={form}
       name="register"
@@ -47,12 +64,10 @@ const Cadastro = () => {
       }}
       scrollToFirstError
     >
-        
-   
       <Form.Item
-        name="Nome de usuário"
+        name="name"
         label="Usuário"
-        tooltip="Como você gostaria que os outros te chamassem?"
+        tooltip="Como você gosta que os outros te chamem?"
         rules={[
           {
             required: true,
@@ -61,7 +76,7 @@ const Cadastro = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={nome} onChange={(e) => setName(e.target.value)} />
       </Form.Item>
       <Form.Item
         name="email"
@@ -77,12 +92,12 @@ const Cadastro = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
       </Form.Item>
 
       <Form.Item
         name="senha"
-        label="senha"
+        label="Senha"
         rules={[
           {
             required: true,
@@ -91,7 +106,7 @@ const Cadastro = () => {
         ]}
         hasFeedback
       >
-        <Input.Password />
+        <Input.Password value={senha} onChange={(e) => setSenha(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -117,33 +132,12 @@ const Cadastro = () => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
-        name="Permissões"
-        valuePropName="checar"
-        rules={[
-          {
-            validator: (_, value) =>
-              value
-                ? Promise.resolve()
-                : Promise.reject(
-                    new Error("Para concluir o cadastro é necessário concordar com os termos")
-                  ),
-          },
-        ]}
-        {...tailFormItemLayout}
-      >
-        <Checkbox>
-          Eu li e aceito <a href="">os termos</a>
-        </Checkbox>
-      </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" onSubmit={() => armazenar("ls_name", nome)}>
           Cadastrar
         </Button>
       </Form.Item>
     </Form>
-     
-     
   );
 };
 export default Cadastro;

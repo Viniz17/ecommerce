@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ADLayout from "../components/Layout";
+import ADLayout from "../../components/Layout";
 
 const Listagem = () => {
   const [data, setData] = useState([]);

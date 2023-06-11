@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ADLayout from "../components/Layout";
-import SearchBar from "../components/SearchBar";
+import ADLayout from "../../components/Layout";
+import SearchBar from "../../components/SearchBar";
 
 const Teste = () => {
   const [data, setData] = useState([]);

@@ -1,7 +1,10 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import "./login.css";
-import "./Cadastro.jsx";
+import "../Cadastro/Cadastro.jsx";
+
+// if (userValid.email != email || userValid.senha != senha){
+//   alert ( "Senha ou login inválidos!")
 
 const Login = () => {
   const onFinish = (values) => {

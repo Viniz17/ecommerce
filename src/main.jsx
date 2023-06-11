@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login.jsx";
-import Cadastro from "./pages/Cadastro.jsx";
-import Listagem from "./pages/Listagem.jsx";
-import Carrinho from "./pages/Carrinho.jsx";
-import Produto from "./pages/Produto.jsx";
-import Teste from "./pages/Teste";
-import Teste2 from "./pages/Teste2.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Cadastro from "./pages/Cadastro/Cadastro.jsx";
+import Listagem from "./pages/Listagem/Listagem.jsx";
+import Carrinho from "./pages/Carrinho/Carrinho.jsx";
+import Produto from "./pages/Produto/Produto.jsx";
+import Teste from "./pages/Testes/Teste.jsx";
+import Teste2 from "./pages/Testes/Teste2.jsx";
 import App from "./App.jsx";
 //import useAuth from "./contexts/auth.jsx"
 
