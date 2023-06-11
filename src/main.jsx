@@ -9,6 +9,12 @@ import Produto from "./pages/Produto.jsx";
 import Teste from "./pages/Teste";
 import Teste2 from "./pages/Teste2.jsx";
 import App from "./App.jsx";
+//import useAuth from "./contexts/auth.jsx"
+
+//const Permission = ({Item}) = > {
+//const { signed } = useAuth();
+
+//};
 
 const router = createBrowserRouter([
   {

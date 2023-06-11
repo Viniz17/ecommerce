@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Styles from "./Layout";
+
 //import SearchBar from "./SearchBar";
 import React from "react";
 
@@ -20,7 +20,7 @@ const Teste2 = () => {
   }, []);
   console.log(search);
   return (
-    <Styles>
+    <>
       {/* <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} /> */}
       <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} />
       <div>
@@ -36,7 +36,7 @@ const Teste2 = () => {
           ))}
         </div>
       </div>
-    </Styles>
+    </>
   );
 };
 

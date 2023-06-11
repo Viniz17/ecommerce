@@ -1,7 +1,7 @@
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 const { Header, Content, Footer } = Layout;
 
-const layout = ({ children }) => {
+const ADLayout = ({ children }) => {
   // const menu = [{nome: 'Teste', rota: '/teste'}]
 
   const {
@@ -22,7 +22,6 @@ const layout = ({ children }) => {
       >
         <div className="demo-logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]} />
-    
       </Header>
       <Content
         className="site-layout"
@@ -59,4 +58,4 @@ const layout = ({ children }) => {
     </Layout>
   );
 };
-export default layout;
+export default ADLayout;

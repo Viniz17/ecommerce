@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Styles from "./Layout";
+import ADLayout from "../components/Layout";
 
 const Listagem = () => {
   const [data, setData] = useState([]);
@@ -16,7 +16,7 @@ const Listagem = () => {
   }, []);
 
   return (
-    <Styles>
+    <ADLayout>
       <div>
         <h1>Lista</h1>
         <div>
@@ -30,7 +30,7 @@ const Listagem = () => {
           ))}
         </div>
       </div>
-    </Styles>
+    </ADLayout>
   );
 };
 
