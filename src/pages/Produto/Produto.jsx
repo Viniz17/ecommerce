@@ -54,7 +54,7 @@ const Produto = () => {
 
   return (
     <>
-      <Link to="/teste">Voltar</Link>
+      <Link to="/listagem">Voltar</Link>
       <Link to="/carrinho">Carrinho</Link>
       <div>
         <h1>{produto.nome}</h1>

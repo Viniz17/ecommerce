@@ -1,5 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formItemLayout = {
   labelCol: {
@@ -42,7 +44,7 @@ const Cadastro = () => {
   };
 
   const handleLogin = () => {
-    const login = { nome, senha };
+    const login = { nome, email, senha };
     saveLogin(login);
   };
 
@@ -57,7 +59,11 @@ const Cadastro = () => {
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    alert("Usuário cadastrado com sucesso!");
+    toast.success("Usuário cadastrado com sucesso!");
+
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 3000);
   };
 
   return (
@@ -144,6 +150,8 @@ const Cadastro = () => {
           <a href="/login">Cadastrar</a>
         </Button>
       </Form.Item>
+
+      <ToastContainer />
     </Form>
   );
 };

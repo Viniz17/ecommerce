@@ -19,6 +19,14 @@ const Carrinho = () => {
     setItem("carrinho", []);
   };
 
+  const calcularValorTotal = () => {
+    let total = 0;
+    carrinho.forEach((item) => {
+      total += item.preco * item.quantidade;
+    });
+    return total.toFixed(2);
+  };
+
   const handleFinalizarCompra = () => {
     // Calcular a quantidade total de cada produto no carrinho
     const quantidadesTotais = carrinho.reduce((quantidades, item) => {
@@ -44,14 +52,12 @@ const Carrinho = () => {
           })
           .catch((error) => {
             console.error(`Erro ao atualizar a quantidade do produto ${itemId}: ${error}`);
-            
           });
       }
     });
 
     setCarrinho([]);
     setItem("carrinho", []);
-
 
     toast.success("Compra finalizada com sucesso!");
 
@@ -75,6 +81,7 @@ const Carrinho = () => {
           </div>
         ))}
       </div>
+      <h4>Valor Total R$:{calcularValorTotal()}</h4>
       {carrinho.length > 0 && <button onClick={handleFinalizarCompra}>Finalizar Compra</button>}
       {carrinho.length > 0 && <button onClick={limparCarrinho}>Limpar Carrinho</button>}
       <ToastContainer />
