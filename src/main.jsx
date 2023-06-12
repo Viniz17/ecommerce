@@ -7,14 +7,8 @@ import Listagem from "./pages/Listagem/Listagem.jsx";
 import Carrinho from "./pages/Carrinho/Carrinho.jsx";
 import Produto from "./pages/Produto/Produto.jsx";
 import Teste from "./pages/Testes/Teste.jsx";
-import Teste2 from "./pages/Testes/Teste2.jsx";
+
 import App from "./App.jsx";
-//import useAuth from "./contexts/auth.jsx"
-
-//const Permission = ({Item}) = > {
-//const { signed } = useAuth();
-
-//};
 
 const router = createBrowserRouter([
   {
@@ -48,10 +42,6 @@ const router = createBrowserRouter([
   {
     path: "teste",
     element: <Teste />,
-  },
-  {
-    path: "teste2",
-    element: <Teste2 />,
   },
 ]);
 

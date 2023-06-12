@@ -1,54 +1,68 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import ADLayout from "../../components/Layout";
-import SearchBar from "../../components/SearchBar";
 
 const Teste = () => {
-  const [data, setData] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [Info, setInfo] = useState({ nome: "", email: "", senha: "" });
+  const [listaUsuarios, setListaUsuarios] = useState([]);
 
+  // const inputNome = useRef();
+  // const inputEmail = useRef();
+  // const inputSenha = useRef();
+
+  // const definirNome = (e) => {
+  //   setInfo({ ...Info, nome: e.target.value });
+  // };
+  // const definirEmail = (e) => {
+  //   setInfo({ ...Info, email: e.target.value });
+  // };
+  // const definirSenha = (e) => {
+  //   setInfo({ ...Info, senha: e.target.value });
+  // };
+
+  // const armazenar = (chave, valor) => {
+  //   localStorage.setItem(chave, valor);
+  // };
+
+  //carrega infos do localstorage se existirem
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/produtos")
-      .then((response) => {
-        setData(response.data);
-        setFilteredItems(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (localStorage.getItem("info_usuarios") !== null) {
+      setListaUsuarios(JSON.parse(localStorage.getItem("info_usuarios")));
+    }
   }, []);
 
-  const handleSearch = (value) => {
-    setSearchValue(value);
-    filterItems(value);
-  };
+  //atualiza as infos do usuario no localstorage
+  useEffect(() => {
+    localStorage.setItem("infos_usuario", JSON.stringify(listaUsuarios));
+  }, [listaUsuarios]);
 
-  const filterItems = (value) => {
-    const filtered = data.filter((item) => item.nome.toLowerCase().includes(value.toLowerCase()));
-    setFilteredItems(filtered);
-  };
+  // setListaUsuarios([...listaUsuarios, Info]);
+
+  // const consultar =(chave) => {
+  //   alert(localStorage.getItem(chave))
+  // }
+
+  // const apagar = (chave)=>{
+  //   localStorage.removeItem(chave)
+  // }
 
   return (
-    <ADLayout>
-      <div>
-        <SearchBar handleSearch={handleSearch} />
-        <h1>Lista</h1>
-        <div>
-          {filteredItems.map((item) => {
-            return (
-              <div key={item.id}>
-                <h4>{item.nome}</h4>
-                <img src={item.imagem} alt={item.nome} />
-                <h4>R${item.preco}</h4>
-                <h4>{item.descrição}</h4>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </ADLayout>
+    <>
+      <label>
+        Digite um nome
+        <input type="text" value={Info.nome} onChange={(e) => setInfo(e.target.value)} />
+        <br />
+      </label>
+      <label>
+        Digite um email
+        <input type="text" value={Info.email} onChange={(e) => setInfo(e.target.value)} />
+        <br />
+      </label>
+      <label>
+        Digite uma senha
+        <input type="text" value={Info.senha} onChange={(e) => setInfo(e.target.value)} />
+        <br />
+        <button onClick={() => setInfo("ls_senha", Info)}>Registrar usuário</button>
+      </label>
+    </>
   );
 };
 

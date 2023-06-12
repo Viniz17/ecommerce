@@ -37,16 +37,23 @@ const Cadastro = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const armazenar = (chave, valor) => {
-    localStorage.setItem(chave, valor);
+  const saveLogin = (login) => {
+    localStorage.setItem("login", JSON.stringify(login));
   };
-  // const consultar = (chave) => {
-  //   alert(localStorage.getItem(chave));
-  // };
 
-  // const apagar = (chave) => {
-  //   localStorage.removeItem(chave);
-  // };
+  const handleLogin = () => {
+    const login = { nome, senha };
+    saveLogin(login);
+  };
+
+  const getLogin = () => {
+    const loginString = localStorage.getItem("login");
+    return JSON.parse(loginString);
+  };
+
+  const infoLogin = getLogin();
+
+  console.log(infoLogin);
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -133,7 +140,7 @@ const Cadastro = () => {
       </Form.Item>
 
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit" onFinish={() => armazenar("ls_name", nome)}>
+        <Button type="primary" htmlType="submit" onClick={handleLogin}>
           <a href="/login">Cadastrar</a>
         </Button>
       </Form.Item>
