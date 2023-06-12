@@ -2,6 +2,7 @@ import { Button, Form, Input } from "antd";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const formItemLayout = {
   labelCol: {
@@ -45,28 +46,36 @@ const Cadastro = () => {
     localStorage.setItem("login", JSON.stringify(login));
   };
 
-  const handleLogin = () => {
-    const login = { nome, userInput, senha };
+  // const handleLogin = () => {
+  //   const login = { nome, userInput, senha };
 
-    const data = localStorage.getItem("login");
-    if (data) {
-      const data2 = JSON.parse(data);
-      const emailData = data2.userInput;
-      console.log(data2);
-      console.log("emailData", emailData.userInput);
+  //   const data = localStorage.getItem("login");
+  //   if (data) {
+  //     const data2 = JSON.parse(data);
+  //     const emailData = data2.userInput;
 
-      if (userInput === emailData) {
-        alert("email igual");
-        setResult("email igual");
-      } else {
-        saveLogin(login);
-        setResult("Valor diferente");
-      }
-    } else {
-      saveLogin(login);
-      setResult("não foi encontrado");
-    }
-  };
+  //     if (userInput === emailData) {
+  //       toast.error("Este email já está cadastrado!");
+  //       setResult("Email já existente.");
+  //     } else {
+  //       toast.success("Usuário cadastrado com sucesso!");
+  //       saveLogin(login);
+  //       setResult("Email válido.");
+  //       setTimeout(() => {
+  //         window.location.href = "/login";
+  //       }, 3000);
+  //     }
+  //   } else {
+  //     saveLogin(login);
+  //     setResult("Email não existe em nossa biblioteca.");
+  //   }
+  // };
+
+  const handleLogin = async () => {
+    const response = await axios.post("http://localhost:3000/register", {email: userInput, password: senha})
+    if (response.status == 201)
+      localStorage.setItem("usuario", userInput)
+  } 
 
   const getLogin = () => {
     const loginString = localStorage.getItem("login");
@@ -78,14 +87,11 @@ const Cadastro = () => {
 
   console.log(infoLogin);
 
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-    toast.success("Usuário cadastrado com sucesso!");
-
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 3000);
-  };
+  // const onFinish = () => {
+  //   setTimeout(() => {
+  //     window.location.href = "/login";
+  //   }, 3000);
+  // };
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
   };
@@ -95,7 +101,6 @@ const Cadastro = () => {
       {...formItemLayout}
       form={form}
       name="register"
-      onFinish={onFinish}
       style={{
         maxWidth: 600,
       }}
@@ -171,7 +176,7 @@ const Cadastro = () => {
 
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit" onClick={handleLogin}>
-          <a href="/login">Cadastrar</a>
+          Cadastrar
         </Button>
       </Form.Item>
 

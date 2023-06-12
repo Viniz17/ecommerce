@@ -2,14 +2,26 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import "./login.css";
 import "../Cadastro/Cadastro.jsx";
+import axios from "axios";
 
 // if (userValid.email != email || userValid.senha != senha){
 //   alert ( "Senha ou login inválidos!")
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = async ({ username, password }) => {
+    const response = await axios.post("http://localhost:3000/login", {
+      email: username,
+      password: password,
+    });
+    if (response.status == 200) localStorage.setItem("usuario", username);
   };
+
+  // const handleLogin = async () => {
+  //   const response = await axios.post("http://localhost:3000/register", {email: userInput, password: senha})
+  //   if (response.status == 201)
+  //     localStorage.setItem("usuario", userInput)
+  // }
+
   return (
     <div className="formulario">
       <div className="formulario-filho">
