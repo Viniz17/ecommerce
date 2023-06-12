@@ -36,20 +36,41 @@ const tailFormItemLayout = {
 const Cadastro = () => {
   const [form] = Form.useForm();
   const [nome, setName] = useState("");
-  const [email, setEmail] = useState("");
+  //const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [userInput, setUserInput] = useState("");
+  const [result, setResult] = useState("");
 
   const saveLogin = (login) => {
     localStorage.setItem("login", JSON.stringify(login));
   };
 
   const handleLogin = () => {
-    const login = { nome, email, senha };
-    saveLogin(login);
+    const login = { nome, userInput, senha };
+
+    const data = localStorage.getItem("login");
+    if (data) {
+      const data2 = JSON.parse(data);
+      const emailData = data2.userInput;
+      console.log(data2);
+      console.log("emailData", emailData.userInput);
+
+      if (userInput === emailData) {
+        alert("email igual");
+        setResult("email igual");
+      } else {
+        saveLogin(login);
+        setResult("Valor diferente");
+      }
+    } else {
+      saveLogin(login);
+      setResult("não foi encontrado");
+    }
   };
 
   const getLogin = () => {
     const loginString = localStorage.getItem("login");
+
     return JSON.parse(loginString);
   };
 
@@ -64,6 +85,9 @@ const Cadastro = () => {
     setTimeout(() => {
       window.location.href = "/login";
     }, 3000);
+  };
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
   };
 
   return (
@@ -105,7 +129,7 @@ const Cadastro = () => {
           },
         ]}
       >
-        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input value={userInput} onChange={handleInputChange} />
       </Form.Item>
 
       <Form.Item

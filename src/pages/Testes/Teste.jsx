@@ -1,69 +1,158 @@
-import { useState, useEffect } from "react";
+import { Button, Form, Input } from "antd";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Teste = () => {
-  const [Info, setInfo] = useState({ nome: "", email: "", senha: "" });
-  const [listaUsuarios, setListaUsuarios] = useState([]);
+const formItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 8,
+    },
+  },
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+    },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+const Cadastro = () => {
+  const [form] = Form.useForm();
+  const [nome, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
-  // const inputNome = useRef();
-  // const inputEmail = useRef();
-  // const inputSenha = useRef();
+  const saveLogin = (login) => {
+    localStorage.setItem("login", JSON.stringify(login));
+  };
 
-  // const definirNome = (e) => {
-  //   setInfo({ ...Info, nome: e.target.value });
-  // };
-  // const definirEmail = (e) => {
-  //   setInfo({ ...Info, email: e.target.value });
-  // };
-  // const definirSenha = (e) => {
-  //   setInfo({ ...Info, senha: e.target.value });
-  // };
+  const handleLogin = () => {
+    const login = { nome, email, senha };
+    saveLogin(login);
+  };
 
-  // const armazenar = (chave, valor) => {
-  //   localStorage.setItem(chave, valor);
-  // };
+  const getLogin = () => {
+    const loginString = localStorage.getItem("login");
+    return JSON.parse(loginString);
+  };
 
-  //carrega infos do localstorage se existirem
-  useEffect(() => {
-    if (localStorage.getItem("info_usuarios") !== null) {
-      setListaUsuarios(JSON.parse(localStorage.getItem("info_usuarios")));
-    }
-  }, []);
+  const infoLogin = getLogin();
 
-  //atualiza as infos do usuario no localstorage
-  useEffect(() => {
-    localStorage.setItem("infos_usuario", JSON.stringify(listaUsuarios));
-  }, [listaUsuarios]);
+  console.log(infoLogin);
 
-  // setListaUsuarios([...listaUsuarios, Info]);
+  const onFinish = (values) => {
+    console.log("Received values of form: ", values);
+    toast.success("Usuário cadastrado com sucesso!");
 
-  // const consultar =(chave) => {
-  //   alert(localStorage.getItem(chave))
-  // }
-
-  // const apagar = (chave)=>{
-  //   localStorage.removeItem(chave)
-  // }
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 3000);
+  };
 
   return (
-    <>
-      <label>
-        Digite um nome
-        <input type="text" value={Info.nome} onChange={(e) => setInfo(e.target.value)} />
-        <br />
-      </label>
-      <label>
-        Digite um email
-        <input type="text" value={Info.email} onChange={(e) => setInfo(e.target.value)} />
-        <br />
-      </label>
-      <label>
-        Digite uma senha
-        <input type="text" value={Info.senha} onChange={(e) => setInfo(e.target.value)} />
-        <br />
-        <button onClick={() => setInfo("ls_senha", Info)}>Registrar usuário</button>
-      </label>
-    </>
+    <Form
+      {...formItemLayout}
+      form={form}
+      name="register"
+      onFinish={onFinish}
+      style={{
+        maxWidth: 600,
+      }}
+      scrollToFirstError
+    >
+      <Form.Item
+        name="name"
+        label="Usuário"
+        tooltip="Como você gosta que os outros te chamem?"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, digite seu nome de usuário!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input value={nome} onChange={(e) => setName(e.target.value)} />
+      </Form.Item>
+      <Form.Item
+        name="email"
+        label="E-mail"
+        rules={[
+          {
+            type: "email",
+            message: "O E-mail não é valido!",
+          },
+          {
+            required: true,
+            message: "Por favor, digite seu E-mail!",
+          },
+        ]}
+      >
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+      </Form.Item>
+
+      <Form.Item
+        name="senha"
+        label="Senha"
+        rules={[
+          {
+            required: true,
+            message: "Digite sua senha!",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.Password value={senha} onChange={(e) => setSenha(e.target.value)} />
+      </Form.Item>
+
+      <Form.Item
+        name="confirme"
+        label="Confirmar"
+        dependencies={["Senha"]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Por favor, confirme sua senha!",
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("senha") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error("A nova senha não coincide!"));
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item {...tailFormItemLayout}>
+        <Button type="primary" htmlType="submit" onClick={handleLogin}>
+          <a href="/login">Cadastrar</a>
+        </Button>
+      </Form.Item>
+
+      <ToastContainer />
+    </Form>
   );
 };
-
-export default Teste;
+export default Cadastro;
