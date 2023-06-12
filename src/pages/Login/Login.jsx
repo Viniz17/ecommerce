@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import "./login.css";
 import "../Cadastro/Cadastro.jsx";
 
@@ -49,15 +49,6 @@ const Login = () => {
               type="password"
               placeholder="Senha"
             />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Salvar</Checkbox>
-            </Form.Item>
-
-            <a className="login-form-forgot" href="">
-              Esqueci minha senha
-            </a>
           </Form.Item>
 
           <Form.Item>

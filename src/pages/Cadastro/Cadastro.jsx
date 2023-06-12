@@ -133,8 +133,8 @@ const Cadastro = () => {
       </Form.Item>
 
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit" onSubmit={() => armazenar("ls_name", nome)}>
-          Cadastrar
+        <Button type="primary" htmlType="submit" onFinish={() => armazenar("ls_name", nome)}>
+          <a href="/login">Cadastrar</a>
         </Button>
       </Form.Item>
     </Form>
