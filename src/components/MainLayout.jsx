@@ -21,7 +21,7 @@ const MainLayout = ({ children }) => {
         <Flex alignItems="center" justifyContent="space-between">
           <Link to="/listagem">
             <Box fontSize="xl" fontWeight="bold" display="flex" alignItems="center">
-              SerraShoes
+              <span className="logoEscrito">SerraShoes</span>
             </Box>
           </Link>
           <Flex alignItems="center">
@@ -64,7 +64,7 @@ const MainLayout = ({ children }) => {
         </Box>
       </Box>
       <Box bg="#1a202c" color="white" py={4} textAlign="center">
-        Trabalho - Grupo 6
+        SerraShoes ©2023 Criado pelo Grupo 06
       </Box>
     </Box>
   );

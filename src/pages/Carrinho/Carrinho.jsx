@@ -32,26 +32,36 @@ const Carrinho = () => {
   };
 
   const handleFinalizarCompra = async () => {
-    await Promise.all(
-      carrinho.map(async (item) => {
-        const response = await axios.get(`http://localhost:3000/produtos/${item.id}`);
-        const produto = response.data;
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-        const novaQuantidade = produto.quantidade - item.quantidade;
-        await axios.patch(`http://localhost:3000/produtos/${item.id}`, {
-          quantidade: novaQuantidade,
-        });
-      })
-    );
+    if (isLoggedIn === "true") {
+      await Promise.all(
+        carrinho.map(async (item) => {
+          const response = await axios.get(`http://localhost:3000/produtos/${item.id}`);
+          const produto = response.data;
 
-    setCarrinho([]);
-    setItem("carrinho", []);
+          const novaQuantidade = produto.quantidade - item.quantidade;
+          await axios.patch(`http://localhost:3000/produtos/${item.id}`, {
+            quantidade: novaQuantidade,
+          });
+        })
+      );
 
-    toast.success("Compra finalizada com sucesso!");
+      setCarrinho([]);
+      setItem("carrinho", []);
 
-    setTimeout(() => {
-      navigate("/");
-    }, 5000);
+      toast.success("Compra finalizada com sucesso!");
+
+      setTimeout(() => {
+        navigate("/listagem");
+      }, 5000);
+    } else {
+      toast.error("Você precisa estar logado para finalizar a compra!");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
   };
 
   return (

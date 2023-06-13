@@ -9,7 +9,7 @@ import MainLayout from "../../components/MainLayout";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  localStorage.setItem("isLoggedIn", "false");
   const onFinish = async ({ username, password }) => {
     try {
       const response = await axios.post("http://localhost:3000/login", {
@@ -18,7 +18,7 @@ const Login = () => {
       });
 
       if (response.status === 200) {
-        localStorage.setItem("usuario", username);
+        localStorage.setItem("isLoggedIn", "true");
         toast.success("Logado com sucesso!");
         setTimeout(() => {
           navigate("/listagem");
@@ -36,7 +36,7 @@ const Login = () => {
   return (
     <MainLayout>
       <div className="formulario">
-        <div className="formulario-filho" style={{ background: "#000" }}>
+        <div className="formulario-filho">
           <Form
             name="normal_login"
             className="login-form"
@@ -57,7 +57,6 @@ const Login = () => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
-                style={{ background: "#fff", color: "#000" }}
               />
             </Form.Item>
             <Form.Item
@@ -73,18 +72,11 @@ const Login = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Senha"
-                style={{ background: "#fff", color: "#000" }}
               />
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-                style={{ background: "#fff", color: "#000" }}
-                hoverable
-              >
+              <Button type="primary" htmlType="submit" className="login-form-button">
                 Entrar
               </Button>
               <span style={{ color: "#fff" }}>Ou </span>
@@ -92,7 +84,6 @@ const Login = () => {
                 href="/cadastro"
                 style={{
                   color: "#fff",
-                  ":hover": { color: "#87CEFA" },
                 }}
               >
                 registre-se agora!
