@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
-import { getItem, setItem } from "../../services/localStorageFuncs";
+import { useParams } from "react-router-dom";
+import { getItem, setItem } from "../../services/LocalStorageFuncs";
 import { BsFillCartCheckFill, BsFillCartPlusFill } from "react-icons/bs";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import { Box, Image, Heading, Text, Flex, Input, Button } from "@chakra-ui/react";
+import "react-toastify/dist/ReactToastify.css";
+
+import MainLayout from "../../components/MainLayout";
 
 const Produto = () => {
   const { id } = useParams();
@@ -36,10 +40,13 @@ const Produto = () => {
       const arrFilter = cart.filter((e) => e.id !== obj.id);
       setCart(arrFilter);
       setItem("carrinho", arrFilter);
+      toast.warning("Produto removido do carrinho!");
     } else {
       const produtoComQuantidade = { ...obj, quantidade };
-      setCart([...cart, produtoComQuantidade]);
-      setItem("carrinho", [...cart, produtoComQuantidade]);
+      const updatedCart = [...cart, produtoComQuantidade];
+      setCart(updatedCart);
+      setItem("carrinho", updatedCart);
+      toast.success("Produto adicionado ao carrinho");
     }
   };
 
@@ -47,33 +54,57 @@ const Produto = () => {
     if (quantidade <= produto.quantidade) {
       handleClick(produto);
     } else {
-      console.log("Quantidade excede o disponível.");
-      toast.error("Digite uma quantidade válida");
+      toast.error("Quantidade indisponível");
     }
   };
 
   return (
-    <>
-      <Link to="/listagem">Voltar</Link>
-      <Link to="/carrinho">Carrinho</Link>
-      <div>
-        <h1>{produto.nome}</h1>
-        <img src={produto.imagem} alt={produto.nome} />
-        <h4>R${produto.preco}</h4>
-        <h4>{produto.descrição}</h4>
-        <h4>Estoque: {produto.quantidade}</h4>
-        <input type="number" value={quantidade} onChange={handleChangeQuantidade} />
-        <button onClick={validarQuantidade}>
-          {cart.some((itemCart) => itemCart.id === produto.id) ? (
-            <BsFillCartCheckFill />
-          ) : (
-            <BsFillCartPlusFill />
-          )}
-        </button>
-      </div>
-    </>
+    <MainLayout>
+      <Box py={4} px={8}>
+        <Flex alignItems="center" flexDirection="column" mt={4}>
+          <Heading as="h1" size="xl" mb={2}>
+            {produto.nome}
+          </Heading>
+          <Image src={produto.imagem} alt={produto.nome} mb={2} maxW="300px" />
+          <Text fontSize="xl" fontWeight="bold" mb={2}>
+            R${produto.preco}
+          </Text>
+          <Text fontSize="lg" color="gray.600" mb={2}>
+            {produto.descrição}
+          </Text>
+          <Text fontSize="lg" color="gray.600" mb={2}>
+            Estoque: {produto.quantidade}
+          </Text>
+          <Text fontSize="lg" color="gray.600" mb={2}>
+            Quantidade
+          </Text>
+          <Input
+            type="number"
+            value={quantidade}
+            onChange={handleChangeQuantidade}
+            width="100px"
+            mb={2}
+          />
+          <Button
+            onClick={validarQuantidade}
+            colorScheme={cart.some((itemCart) => itemCart.id === produto.id) ? "green" : "blue"}
+            leftIcon={
+              cart.some((itemCart) => itemCart.id === produto.id) ? (
+                <BsFillCartCheckFill />
+              ) : (
+                <BsFillCartPlusFill />
+              )
+            }
+          >
+            {cart.some((itemCart) => itemCart.id === produto.id)
+              ? "Adicionado"
+              : "Adicionar ao Carrinho"}
+          </Button>
+        </Flex>
+        <ToastContainer />
+      </Box>
+    </MainLayout>
   );
 };
 
-// eslint-disable-next-line no-irregular-whitespace
 export default Produto;

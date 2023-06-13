@@ -1,20 +1,9 @@
-// import { Input } from "antd";
-// const { Search } = Input;
+import { useState } from "react";
+import { Flex, Input, Button } from "@chakra-ui/react";
 
-// const SearchBar = () => {
-//   return (
-//     <>
-//       <Search placeholder="Procure o produto pelo nome" enterButton="Search" size="large" />
-//     </>
-//   );
-// };
-
-// export default SearchBar;
-
-import React, { useState } from 'react';
-
+// eslint-disable-next-line react/prop-types
 const SearchBar = ({ handleSearch }) => {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   const handleChange = (event) => {
     setSearchValue(event.target.value);
@@ -27,15 +16,21 @@ const SearchBar = ({ handleSearch }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={searchValue}
-        onChange={handleChange}
-        placeholder="Pesquisar..."
-      />
-      <button type="submit">Pesquisar</button>
+      <Flex alignItems="center">
+        <Input
+          type="text"
+          value={searchValue}
+          onChange={handleChange}
+          placeholder="Pesquisar..."
+          mr={2}
+        />
+        <Button type="submit" colorScheme="teal">
+          Pesquisar
+        </Button>
+      </Flex>
     </form>
   );
 };
 
+// eslint-disable-next-line no-irregular-whitespace
 export default SearchBar;

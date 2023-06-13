@@ -1,0 +1,15 @@
+.formularioca {
+  position: relative;
+}
+.formularioCadastro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 40%);
+  max-width: 100%;
+  background-color: #d4d4ec;
+  border-radius: 20px;
+  border-color: black;
+  padding: 50px 50px;
+  box-shadow: 10px 10px 30px rgba(0,  0,  0,  0.10);
+}
