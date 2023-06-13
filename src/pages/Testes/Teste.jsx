@@ -1,158 +1,63 @@
-import { Button, Form, Input } from "antd";
-import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import SearchBar from "../../components/SearchBar";
+import MainLayout from "../../components/MainLayout";
+import { SimpleGrid } from "@chakra-ui/react";
 
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
-const Cadastro = () => {
-  const [form] = Form.useForm();
-  const [nome, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+const Teste = () => {
+  const [data, setData] = useState([]);
+  const [setSearchValue] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
 
-  const saveLogin = (login) => {
-    localStorage.setItem("login", JSON.stringify(login));
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/produtos")
+      .then((response) => {
+        setData(response.data);
+        setFilteredItems(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleSearch = (value) => {
+    setSearchValue(value);
+    filterItems(value);
   };
 
-  const handleLogin = () => {
-    const login = { nome, email, senha };
-    saveLogin(login);
-  };
-
-  const getLogin = () => {
-    const loginString = localStorage.getItem("login");
-    return JSON.parse(loginString);
-  };
-
-  const infoLogin = getLogin();
-
-  console.log(infoLogin);
-
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-    toast.success("Usuário cadastrado com sucesso!");
-
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 3000);
+  const filterItems = (value) => {
+    const filtered = data.filter((item) => item.nome.toLowerCase().includes(value.toLowerCase()));
+    setFilteredItems(filtered);
   };
 
   return (
-    <Form
-      {...formItemLayout}
-      form={form}
-      name="register"
-      onFinish={onFinish}
-      style={{
-        maxWidth: 600,
-      }}
-      scrollToFirstError
-    >
-      <Form.Item
-        name="name"
-        label="Usuário"
-        tooltip="Como você gosta que os outros te chamem?"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, digite seu nome de usuário!",
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input value={nome} onChange={(e) => setName(e.target.value)} />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        label="E-mail"
-        rules={[
-          {
-            type: "email",
-            message: "O E-mail não é valido!",
-          },
-          {
-            required: true,
-            message: "Por favor, digite seu E-mail!",
-          },
-        ]}
-      >
-        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
-      </Form.Item>
-
-      <Form.Item
-        name="senha"
-        label="Senha"
-        rules={[
-          {
-            required: true,
-            message: "Digite sua senha!",
-          },
-        ]}
-        hasFeedback
-      >
-        <Input.Password value={senha} onChange={(e) => setSenha(e.target.value)} />
-      </Form.Item>
-
-      <Form.Item
-        name="confirme"
-        label="Confirmar"
-        dependencies={["Senha"]}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: "Por favor, confirme sua senha!",
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("senha") === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error("A nova senha não coincide!"));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit" onClick={handleLogin}>
-          <a href="/login">Cadastrar</a>
-        </Button>
-      </Form.Item>
-
-      <ToastContainer />
-    </Form>
+    <MainLayout>
+      <div>
+        <SearchBar handleSearch={handleSearch} />
+        <h1>Lista</h1>
+        <SimpleGrid minChildWidth="120px" spacing="40px">
+          {filteredItems.map((item) => {
+            if (item.quantidade > 0) {
+              return (
+                <Link key={item.id} to={`/produto/${item.id}`}>
+                  <div>
+                    <h4>{item.nome}</h4>
+                    <img src={item.imagem} alt={item.nome} />
+                    <h4>R${item.preco}</h4>
+                    <h4>{item.descricao}</h4>
+                  </div>
+                </Link>
+              );
+            }
+            return null;
+          })}
+        </SimpleGrid>
+      </div>
+    </MainLayout>
   );
 };
-export default Cadastro;
+
+// eslint-disable-next-line no-irregular-whitespace
+export default Teste;

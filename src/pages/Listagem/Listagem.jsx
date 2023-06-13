@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
+import MainLayout from "../../components/MainLayout";
+import { SimpleGrid } from "@chakra-ui/react";
 
 const Listagem = () => {
   const [data, setData] = useState([]);
@@ -31,27 +33,29 @@ const Listagem = () => {
   };
 
   return (
-    <div>
-      <SearchBar handleSearch={handleSearch} />
-      <h1>Lista</h1>
+    <MainLayout>
       <div>
-        {filteredItems.map((item) => {
-          if (item.quantidade > 0) {
-            return (
-              <Link key={item.id} to={`/produto/${item.id}`}>
-                <div>
-                  <h4>{item.nome}</h4>
-                  <img src={item.imagem} alt={item.nome} />
-                  <h4>R${item.preco}</h4>
-                  <h4>{item.descricao}</h4>
-                </div>
-              </Link>
-            );
-          }
-          return null;
-        })}
+        <SearchBar handleSearch={handleSearch} />
+        <h1>Lista</h1>
+        <SimpleGrid minChildWidth="120px" spacing="40px">
+          {filteredItems.map((item) => {
+            if (item.quantidade > 0) {
+              return (
+                <Link key={item.id} to={`/produto/${item.id}`}>
+                  <div>
+                    <h4>{item.nome}</h4>
+                    <img src={item.imagem} alt={item.nome} />
+                    <h4>R${item.preco}</h4>
+                    <h4>{item.descricao}</h4>
+                  </div>
+                </Link>
+              );
+            }
+            return null;
+          })}
+        </SimpleGrid>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

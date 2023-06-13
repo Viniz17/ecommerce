@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getItem, setItem } from "../../services/localStorageFuncs";
+import { getItem, setItem } from "../../services/LocalStorageFuncs";
 import { BsFillCartDashFill } from "react-icons/bs";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,34 +27,18 @@ const Carrinho = () => {
     return total.toFixed(2);
   };
 
-  const handleFinalizarCompra = () => {
-    // Calcular a quantidade total de cada produto no carrinho
-    const quantidadesTotais = carrinho.reduce((quantidades, item) => {
-      const quantidadeSelecionada = item.quantidade; // Obter a quantidade selecionada pelo usuário
-      quantidades[item.id] = quantidades[item.id] || 0;
-      quantidades[item.id] += quantidadeSelecionada;
-      return quantidades;
-    }, {});
+  const handleFinalizarCompra = async () => {
+    await Promise.all(
+      carrinho.map(async (item) => {
+        const response = await axios.get(`http://localhost:3000/produtos/${item.id}`);
+        const produto = response.data;
 
-    // Fazer a requisição para diminuir a quantidade de produtos em estoque
-    Object.keys(quantidadesTotais).forEach((itemId) => {
-      const quantidadeTotal = quantidadesTotais[itemId];
-      const item = carrinho.find((item) => item.id === itemId);
-
-      if (item) {
-        const novaQuantidade = item.quantidade - quantidadeTotal;
-
-        axios
-          .patch(`http://localhost:3000/produtos/${itemId}`, { quantidade: novaQuantidade })
-          // eslint-disable-next-line no-unused-vars
-          .then((response) => {
-            console.log(`Quantidade do produto ${itemId} atualizada com sucesso.`);
-          })
-          .catch((error) => {
-            console.error(`Erro ao atualizar a quantidade do produto ${itemId}: ${error}`);
-          });
-      }
-    });
+        const novaQuantidade = produto.quantidade - item.quantidade;
+        await axios.patch(`http://localhost:3000/produtos/${item.id}`, {
+          quantidade: novaQuantidade,
+        });
+      })
+    );
 
     setCarrinho([]);
     setItem("carrinho", []);
@@ -62,8 +46,8 @@ const Carrinho = () => {
     toast.success("Compra finalizada com sucesso!");
 
     setTimeout(() => {
-      window.location.href = "/";
-    }, 3000);
+      window.location.href = "/teste";
+    }, 5000);
   };
 
   return (
@@ -81,7 +65,7 @@ const Carrinho = () => {
           </div>
         ))}
       </div>
-      <h4>Valor Total R$:{calcularValorTotal()}</h4>
+      <h4>Valor Total: R$ {calcularValorTotal()}</h4>
       {carrinho.length > 0 && <button onClick={handleFinalizarCompra}>Finalizar Compra</button>}
       {carrinho.length > 0 && <button onClick={limparCarrinho}>Limpar Carrinho</button>}
       <ToastContainer />
