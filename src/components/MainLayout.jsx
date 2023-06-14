@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
-import { Link, useLocation } from "react-router-dom";
+import { Box, Flex, Button } from "@chakra-ui/react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
+import { FaSignOutAlt } from "react-icons/fa";
 
 // eslint-disable-next-line react/prop-types
 const MainLayout = ({ children }) => {
   const location = useLocation();
   const isCarrinhoPage = location.pathname === "/carrinho";
   const [cartItemCount, setCartItemCount] = useState(0);
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+  const isUserLoggedIn = !!userId; // Verifica se o userId está presente
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const itemCount = cart.reduce((total, item) => total + Number(item.quantidade), 0); // Converter a quantidade para número
+    const itemCount = cart.reduce((total, item) => total + Number(item.quantidade), 0);
     setCartItemCount(itemCount);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
     <Box minHeight="100vh" backgroundColor="#fff" display="flex" flexDirection="column">
@@ -50,11 +59,32 @@ const MainLayout = ({ children }) => {
                 </Link>
               </Flex>
             )}
-            <Link to="/login">
-              <Box display="flex" alignItems="center">
-                <FiUser size={24} />
+            {isUserLoggedIn && ( // Verifica se o usuário está logado
+              <Link to="/perfil">
+                <Box display="flex" alignItems="center">
+                  <FiUser size={24} />
+                </Box>
+              </Link>
+            )}
+            {!isUserLoggedIn && ( // Verifica se o usuário está logado
+              <Link to="/login">
+                <Box display="flex" alignItems="center">
+                  <FiUser size={24} />
+                </Box>
+              </Link>
+            )}
+            {isUserLoggedIn && ( // Verifica se a página é a de perfil e o usuário está logado
+              <Box display="flex" alignItems="center" ml={4}>
+                <Button
+                  colorScheme="white"
+                  variant="ghost"
+                  onClick={handleLogout}
+                  leftIcon={<FaSignOutAlt />}
+                >
+                  Logout
+                </Button>
               </Box>
-            </Link>
+            )}
           </Flex>
         </Flex>
       </Box>

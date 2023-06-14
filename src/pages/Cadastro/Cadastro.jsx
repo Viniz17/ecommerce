@@ -41,7 +41,7 @@ const tailFormItemLayout = {
 const Cadastro = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [nome, setName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -50,6 +50,7 @@ const Cadastro = () => {
 
     try {
       const response = await axios.post("http://localhost:3000/register", {
+        name: name,
         email: email,
         password: senha,
       });
@@ -99,7 +100,7 @@ const Cadastro = () => {
                 },
               ]}
             >
-              <Input value={nome} onChange={(e) => setName(e.target.value)} />
+              <Input value={name} onChange={(e) => setName(e.target.value)} />
             </Form.Item>
             <Form.Item
               name="email"

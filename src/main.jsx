@@ -7,6 +7,7 @@ import Listagem from "./pages/Listagem/Listagem.jsx";
 import Carrinho from "./pages/Carrinho/Carrinho.jsx";
 import Produto from "./pages/Produto/Produto.jsx";
 import Teste from "./pages/Testes/Teste.jsx";
+import Perfil from "./pages/Perfil/Perfil.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import App from "./App.jsx";
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/produto/:id",
     element: <Produto />,
+  },
+  {
+    path: "/perfil",
+    element: <Perfil />,
   },
   {
     path: "teste",

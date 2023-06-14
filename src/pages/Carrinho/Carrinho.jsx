@@ -33,28 +33,41 @@ const Carrinho = () => {
 
   const handleFinalizarCompra = async () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const userId = localStorage.getItem("userId");
 
-    if (isLoggedIn === "true") {
-      await Promise.all(
-        carrinho.map(async (item) => {
-          const response = await axios.get(`http://localhost:3000/produtos/${item.id}`);
-          const produto = response.data;
+    if (isLoggedIn === "true" && userId) {
+      const pedido = {
+        idUser: parseInt(userId),
+        itens: carrinho.map((item) => ({ idProduto: item.id, quantidade: item.quantidade })),
+        valorTotal: parseFloat(calcularValorTotal()),
+      };
 
-          const novaQuantidade = produto.quantidade - item.quantidade;
-          await axios.patch(`http://localhost:3000/produtos/${item.id}`, {
-            quantidade: novaQuantidade,
-          });
-        })
-      );
+      try {
+        await Promise.all(
+          carrinho.map(async (item) => {
+            const response = await axios.get(`http://localhost:3000/produtos/${item.id}`);
+            const produto = response.data;
 
-      setCarrinho([]);
-      setItem("carrinho", []);
+            const novaQuantidade = produto.quantidade - item.quantidade;
+            await axios.patch(`http://localhost:3000/produtos/${item.id}`, {
+              quantidade: novaQuantidade,
+            });
+          })
+        );
 
-      toast.success("Compra finalizada com sucesso!");
+        setCarrinho([]);
+        setItem("carrinho", []);
 
-      setTimeout(() => {
-        navigate("/listagem");
-      }, 5000);
+        await axios.post("http://localhost:3000/pedidos", pedido);
+
+        toast.success("Compra finalizada com sucesso!");
+
+        setTimeout(() => {
+          navigate("/perfil");
+        }, 3000);
+      } catch (error) {
+        toast.error("Erro ao finalizar a compra. Por favor, tente novamente mais tarde.");
+      }
     } else {
       toast.error("Você precisa estar logado para finalizar a compra!");
 

@@ -10,6 +10,8 @@ import MainLayout from "../../components/MainLayout";
 const Login = () => {
   const navigate = useNavigate();
   localStorage.setItem("isLoggedIn", "false");
+  localStorage.removeItem("id");
+
   const onFinish = async ({ username, password }) => {
     try {
       const response = await axios.post("http://localhost:3000/login", {
@@ -19,6 +21,8 @@ const Login = () => {
 
       if (response.status === 200) {
         localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userId", response.data.user.id);
+        localStorage.setItem("userName", response.data.user.name); // Guarda o campo "name" no localStorage
         toast.success("Logado com sucesso!");
         setTimeout(() => {
           navigate("/listagem");
