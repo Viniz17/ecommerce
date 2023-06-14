@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import "./login.css";
+import "./Login.css";
 import "../Cadastro/Cadastro.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -49,6 +49,8 @@ const Login = () => {
             }}
             onFinish={onFinish}
           >
+            <div style={{ display: "flex", alignItems: "center" }} />
+            <img src="/allstar.png" alt="Logo" style={{ marginRight: "10px" }} />
             <Form.Item
               name="username"
               rules={[
@@ -83,15 +85,7 @@ const Login = () => {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Entrar
               </Button>
-              <span style={{ color: "#fff" }}>Ou </span>
-              <a
-                href="/cadastro"
-                style={{
-                  color: "#fff",
-                }}
-              >
-                registre-se agora!
-              </a>
+              Ou <a href="/cadastro">registre-se agora!</a>
             </Form.Item>
           </Form>
         </div>

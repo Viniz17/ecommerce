@@ -1,16 +1,36 @@
+.logo {
+  /* margin: 0 auto; */
+  width: 30%;
+  height: auto;
+}
 .formularioca {
   position: relative;
 }
 .formularioCadastro {
+  /* display: flex; */
+  /* align-items: center; */
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  transform: translate(-50%, 40%);
+  transform: translate(-30%, -20%);
   max-width: 100%;
-  background-color: 000;
-  font-style: #fff;
+  background-color: #d1d1d4;
   border-radius: 20px;
   border-color: black;
-  padding: 50px 50px;
-  box-shadow: 10px 10px 30px rgba(0,  0,  0,  0.10);
+  padding: 40px 40px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
 }
+
+.botaocadastro {
+  background-color: black;
+  color: white;
+}
+
+/* .botaovoltar {
+  background-color: black;
+  color: white;
+}
+
+.botaovoltar:hover {
+  background-color: red;
+} */

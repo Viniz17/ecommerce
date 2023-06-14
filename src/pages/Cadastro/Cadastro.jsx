@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import "../Cadastro/Cadastro.css";
+import "./Cadastro.css";
 import MainLayout from "../../components/MainLayout";
 
 const formItemLayout = {
@@ -78,6 +78,7 @@ const Cadastro = () => {
   return (
     <MainLayout>
       <div className="formularioca">
+        <img className="logo" src="./nomefacil.png" alt="logo" />
         <div className="formularioCadastro">
           <Form
             {...formItemLayout}
@@ -158,12 +159,17 @@ const Cadastro = () => {
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>
-              <Button type="primary" htmlType="submit" onClick={handleLogin}>
+              <Button
+                className="botaocadastro"
+                type="primary"
+                htmlType="submit"
+                onClick={handleLogin}
+              >
                 Cadastrar
               </Button>
             </Form.Item>
 
-            <ToastContainer />
+            <ToastContainer position="top-right" />
           </Form>
         </div>
       </div>

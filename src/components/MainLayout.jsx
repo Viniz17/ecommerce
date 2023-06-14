@@ -3,6 +3,7 @@ import { Box, Flex, Button } from "@chakra-ui/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa";
+import "./MainLayout.css";
 
 // eslint-disable-next-line react/prop-types
 const MainLayout = ({ children }) => {
@@ -11,7 +12,8 @@ const MainLayout = ({ children }) => {
   const [cartItemCount, setCartItemCount] = useState(0);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
-  const isUserLoggedIn = !!userId; // Verifica se o userId está presente
+  const userName = localStorage.getItem("userName"); // Obtém o nome do localStorage
+  const isUserLoggedIn = !!userId;
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("carrinho")) || [];
@@ -59,21 +61,24 @@ const MainLayout = ({ children }) => {
                 </Link>
               </Flex>
             )}
-            {isUserLoggedIn && ( // Verifica se o usuário está logado
+            {isUserLoggedIn && (
               <Link to="/perfil">
                 <Box display="flex" alignItems="center">
                   <FiUser size={24} />
+                  <Box ml={2} className="userName">
+                    {userName}
+                  </Box>
                 </Box>
               </Link>
             )}
-            {!isUserLoggedIn && ( // Verifica se o usuário está logado
+            {!isUserLoggedIn && (
               <Link to="/login">
                 <Box display="flex" alignItems="center">
                   <FiUser size={24} />
                 </Box>
               </Link>
             )}
-            {isUserLoggedIn && ( // Verifica se a página é a de perfil e o usuário está logado
+            {isUserLoggedIn && (
               <Box display="flex" alignItems="center" ml={4}>
                 <Button
                   colorScheme="white"

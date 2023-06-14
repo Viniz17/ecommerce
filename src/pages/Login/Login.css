@@ -6,22 +6,17 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 0);
   max-width: 100%;
-  background-color: #000;
+  background-color: #d1d1d4;
   border-radius: 20px;
-  padding: 50px 50px;
+  padding: 40px 40px;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.site-form-item-icon {
-  background: "#fff";
-  color: "#000";
-  background: "#fff";
-   color: "#000"
-}
 .login-form {
   max-width: 300px;
+  color: black;
 }
 .login-form-forgot {
   float: right;
@@ -31,6 +26,9 @@
 }
 .login-form-button {
   width: 100%;
-  background: "#fff";
-  color: "#000";
+  background-color: black;
+}
+.login-form-button:hover {
+  width: 100%;
+  background-color: black;
 }
