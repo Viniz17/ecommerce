@@ -11,15 +11,28 @@ import MainLayout from "../../components/MainLayout";
 
 const Produto = () => {
   const { id } = useParams();
-  const [produto, setProduto] = useState(null);
   const [cart, setCart] = useState(getItem("carrinho") || []);
   const [quantidade, setQuantidade] = useState(1);
+  const [user, setUser] = useState(null);
+  const [produto, setProduto] = useState({});
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId"); // Obter o userId do localStorage
+
+    if (userId) {
+      setUser({ userId }); // Configurar o userId como o valor inicial do estado user
+    }
+  }, []);
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/produtos/${id}`)
       .then((response) => {
-        setProduto(response.data);
+        const produtoData = response.data;
+        if (!produtoData.ratings) {
+          produtoData.ratings = [];
+        }
+        setProduto(produtoData);
       })
       .catch((error) => {
         console.error(error);
@@ -58,6 +71,38 @@ const Produto = () => {
     }
   };
 
+  const handleRating = (rating) => {
+    if (!user) {
+      toast.warning("Você precisa estar logado para avaliar um produto!");
+      return;
+    }
+
+    if (produto.ratings && produto.ratings.includes(user.userId)) {
+      toast.warning("Você já avaliou este produto!");
+      return;
+    }
+
+    const updatedProduto = { ...produto };
+    if (rating === "positive") {
+      updatedProduto.feedbackPositivo += 1;
+    } else if (rating === "negative") {
+      updatedProduto.feedbackNegativo += 1;
+    }
+    updatedProduto.ratings = updatedProduto.ratings || [];
+    updatedProduto.ratings.push(user.userId);
+
+    axios
+      .patch(`http://localhost:3000/produtos/${id}`, updatedProduto)
+      .then((response) => {
+        setProduto(response.data);
+        toast.success("Avaliação registrada com sucesso!");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Ocorreu um erro ao registrar a avaliação");
+      });
+  };
+
   return (
     <MainLayout>
       <Box py={4} px={8}>
@@ -70,7 +115,7 @@ const Produto = () => {
             R${produto.preco}
           </Text>
           <Text fontSize="lg" color="gray.600" mb={2}>
-            {produto.descrição}
+            {produto.descricao}
           </Text>
           <Text fontSize="lg" color="gray.600" mb={2}>
             Estoque: {produto.quantidade}
@@ -87,7 +132,7 @@ const Produto = () => {
           />
           <Button
             onClick={validarQuantidade}
-            colorScheme={cart.some((itemCart) => itemCart.id === produto.id) ? "green" : "blue"}
+            colorScheme={cart.some((itemCart) => itemCart.id === produto.id) ? "yellow" : "blue"}
             leftIcon={
               cart.some((itemCart) => itemCart.id === produto.id) ? (
                 <BsFillCartCheckFill />
@@ -97,12 +142,29 @@ const Produto = () => {
             }
           >
             {cart.some((itemCart) => itemCart.id === produto.id)
-              ? "Adicionado"
+              ? "Remover do Carrinho"
               : "Adicionar ao Carrinho"}
           </Button>
         </Flex>
-        <ToastContainer />
+        <Flex justifyContent="center" mt={8}>
+          <Button
+            colorScheme="green"
+            disabled={!user || (produto.ratings && produto.ratings.includes(user.userId))}
+            onClick={() => handleRating("positive")}
+            mr={4}
+          >
+            Gostei ({produto.feedbackPositivo})
+          </Button>
+          <Button
+            colorScheme="red"
+            disabled={!user || (produto.ratings && produto.ratings.includes(user.userId))}
+            onClick={() => handleRating("negative")}
+          >
+            Não Gostei ({produto.feedbackNegativo})
+          </Button>
+        </Flex>
       </Box>
+      <ToastContainer />
     </MainLayout>
   );
 };
