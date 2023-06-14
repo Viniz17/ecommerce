@@ -168,11 +168,10 @@ const Cadastro = () => {
                 Cadastrar
               </Button>
             </Form.Item>
-
-            <ToastContainer position="top-right" />
           </Form>
         </div>
       </div>
+      <ToastContainer/>
     </MainLayout>
   );
 };
