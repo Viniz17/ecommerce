@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../../components/MainLayout";
 
 const Perfil = () => {
   const [pedidos, setPedidos] = useState([]);
   const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPedidos = async () => {
@@ -73,7 +75,12 @@ const Perfil = () => {
                     <Box key={item.idProduto} display="flex" alignItems="center">
                       <Image src={item.imagem} alt={item.nome} boxSize="100px" objectFit="cover" />
                       <VStack ml={4} align="start">
-                        <Text fontSize="md" fontWeight="bold">
+                        <Text
+                          fontSize="md"
+                          fontWeight="bold"
+                          cursor="pointer"
+                          onClick={() => navigate(`/produto/${item.idProduto}`)}
+                        >
                           Produto: {item.nome}
                         </Text>
                         <Text fontSize="sm" color="gray.600">
