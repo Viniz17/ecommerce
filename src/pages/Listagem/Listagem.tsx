@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { SimpleGrid, Box, Heading, Image, Text, Select, Button } from "@chakra-ui/react";
@@ -6,17 +6,25 @@ import { SimpleGrid, Box, Heading, Image, Text, Select, Button } from "@chakra-u
 import SearchBar from "../../components/SearchBar";
 import MainLayout from "../../components/MainLayout";
 
-const Listagem = () => {
-  const [data, setData] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [sortOrder, setSortOrder] = useState("preco_asc"); // Initial sort order: ascending by price
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6);
+interface Item {
+  id: number;
+  nome: string;
+  preco: number;
+  quantidade: number;
+  imagem: string;
+}
+
+const Listagem: React.FC = () => {
+  const [data, setData] = useState<Item[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const [sortOrder, setSortOrder] = useState<string>("preco_asc"); // Initial sort order: ascending by price
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage] = useState<number>(6);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/produtos")
+      .get<Item[]>("http://localhost:3000/produtos")
       .then((response) => {
         setData(response.data);
         setFilteredItems(response.data);
@@ -28,34 +36,37 @@ const Listagem = () => {
 
   useEffect(() => {
     filterItems(searchValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   useEffect(() => {
     sortItems(sortOrder);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortOrder]);
 
-  const handleSearch = (value) => {
+  const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
-  const filterItems = (value) => {
+  const filterItems = (value: string) => {
     const filtered = data.filter((item) => item.nome.toLowerCase().includes(value.toLowerCase()));
     setFilteredItems(filtered);
   };
 
-  const sortItems = (order) => {
-    let sorted;
+  const sortItems = (order: string) => {
+    let sorted: Item[] | undefined;
+  
     if (order === "preco_asc") {
       sorted = [...filteredItems].sort((a, b) => a.preco - b.preco);
     } else if (order === "preco_desc") {
       sorted = [...filteredItems].sort((a, b) => b.preco - a.preco);
     }
-    setFilteredItems(sorted);
+  
+    if (sorted !== undefined) {
+      setFilteredItems(sorted);
+    }
   };
+  
 
-  const handleSortOrderChange = (event) => {
+  const handleSortOrderChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSortOrder(event.target.value);
   };
 
@@ -66,7 +77,7 @@ const Listagem = () => {
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 

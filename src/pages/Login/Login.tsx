@@ -1,11 +1,12 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import "./Login.css";
-import "../Cadastro/Cadastro.jsx";
+import "../Cadastro/Cadastro.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import MainLayout from "../../components/MainLayout";
+import MainLayout from "../../components/MainLayout.js";
+import React from "react";
 
 const Login = () => {
   const navigate = useNavigate();

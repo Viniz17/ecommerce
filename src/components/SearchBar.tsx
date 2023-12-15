@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Flex, Input, Button } from "@chakra-ui/react";
+import React from "react";
 
 // eslint-disable-next-line react/prop-types
 const SearchBar = ({ handleSearch }) => {

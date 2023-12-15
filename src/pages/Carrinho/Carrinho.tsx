@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { getItem, setItem } from "../../services/LocalStorageFuncs";
 import MainLayout from "../../components/MainLayout";
+import React from "react";
 
 const Carrinho = () => {
   const [carrinho, setCarrinho] = useState(getItem("carrinho") || []);

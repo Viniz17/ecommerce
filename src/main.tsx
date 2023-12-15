@@ -6,11 +6,16 @@ import Cadastro from "./pages/Cadastro/Cadastro.jsx";
 import Listagem from "./pages/Listagem/Listagem.jsx";
 import Carrinho from "./pages/Carrinho/Carrinho.jsx";
 import Produto from "./pages/Produto/Produto.jsx";
-import Teste from "./pages/Testes/Teste.jsx";
 import Perfil from "./pages/Perfil/Perfil.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 
-import App from "./App.jsx";
+import App from "./App.js";
+
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Root element with id 'root' not found");
+}
 
 const router = createBrowserRouter([
   {
@@ -45,13 +50,9 @@ const router = createBrowserRouter([
     path: "/perfil",
     element: <Perfil />,
   },
-  {
-    path: "teste",
-    element: <Teste />,
-  },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <ChakraProvider>
       <RouterProvider router={router} />

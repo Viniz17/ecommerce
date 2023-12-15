@@ -1,55 +1,69 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../components/MainLayout";
 
-const Perfil = () => {
-  const [pedidos, setPedidos] = useState([]);
+interface Item {
+  idProduto: number;
+  nome: string;
+  imagem: string;
+  quantidade: number;
+  preco: number;
+}
+
+interface Pedido {
+  id: number;
+  valorTotal: number;
+  itens: Item[];
+}
+
+const Perfil: React.FC = () => {
+  const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/pedidos?idUser=${userId}`);
-        const pedidosData = response.data;
+        if (userId) {
+          const response = await axios.get<Pedido[]>(`http://localhost:3000/pedidos?idUser=${userId}`);
+          const pedidosData = response.data;
 
-        // Obter informações completas de cada item do pedido
-        const pedidosCompletos = await Promise.all(
-          pedidosData.map(async (pedido) => {
-            const itensCompletos = await Promise.all(
-              pedido.itens.map(async (item) => {
-                const produtoResponse = await axios.get(
-                  `http://localhost:3000/produtos/${item.idProduto}`
-                );
-                const produto = produtoResponse.data;
-                const itemComDetalhes = {
-                  ...item,
-                  nome: produto.nome,
-                  imagem: produto.imagem,
-                  preco: produto.preco,
-                };
-                return itemComDetalhes;
-              })
-            );
+          // Obter informações completas de cada item do pedido
+          const pedidosCompletos = await Promise.all(
+            pedidosData.map(async (pedido) => {
+              const itensCompletos = await Promise.all(
+                pedido.itens.map(async (item) => {
+                  const produtoResponse = await axios.get(
+                    `http://localhost:3000/produtos/${item.idProduto}`
+                  );
+                  const produto = produtoResponse.data;
+                  const itemComDetalhes: Item = {
+                    ...item,
+                    nome: produto.nome,
+                    imagem: produto.imagem,
+                    preco: produto.preco,
+                  };
+                  return itemComDetalhes;
+                })
+              );
 
-            return {
-              ...pedido,
-              itens: itensCompletos,
-            };
-          })
-        );
+              return {
+                ...pedido,
+                itens: itensCompletos,
+              };
+            })
+          );
 
-        setPedidos(pedidosCompletos);
+          setPedidos(pedidosCompletos);
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
-    if (userId) {
-      fetchPedidos();
-    }
+    fetchPedidos();
   }, [userId]);
 
   return (

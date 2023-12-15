@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getItem, setItem } from "../../services/LocalStorageFuncs";
@@ -9,24 +9,36 @@ import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "../../components/MainLayout";
 
-const Produto = () => {
-  const { id } = useParams();
-  const [cart, setCart] = useState(getItem("carrinho") || []);
+interface Produto {
+  id: number;
+  nome: string;
+  imagem: string;
+  preco: number;
+  descricao: string;
+  quantidade: number;
+  feedbackPositivo: number;
+  feedbackNegativo: number;
+  ratings: number[];
+}
+
+const Produto: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [cart, setCart] = useState<Produto[]>(getItem("carrinho") || []);
   const [quantidade, setQuantidade] = useState(1);
-  const [user, setUser] = useState(null);
-  const [produto, setProduto] = useState({});
+  const [user, setUser] = useState<{ userId: string } | null>(null);
+  const [produto, setProduto] = useState<Produto | null>(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Obter o userId do localStorage
+    const userId = localStorage.getItem("userId");
 
     if (userId) {
-      setUser({ userId }); // Configurar o userId como o valor inicial do estado user
+      setUser({ userId });
     }
   }, []);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/produtos/${id}`)
+      .get<Produto>(`http://localhost:3000/produtos/${id}`)
       .then((response) => {
         const produtoData = response.data;
         if (!produtoData.ratings) {
@@ -43,11 +55,11 @@ const Produto = () => {
     return <div>Carregando...</div>;
   }
 
-  const handleChangeQuantidade = (event) => {
-    setQuantidade(event.target.value);
+  const handleChangeQuantidade = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantidade(Number(event.target.value));
   };
 
-  const handleClick = (obj) => {
+  const handleClick = (obj: Produto) => {
     const element = cart.find((e) => e.id === obj.id);
     if (element) {
       const arrFilter = cart.filter((e) => e.id !== obj.id);
@@ -71,13 +83,13 @@ const Produto = () => {
     }
   };
 
-  const handleRating = (rating) => {
+  const handleRating = (rating: "positive" | "negative") => {
     if (!user) {
       toast.warning("Você precisa estar logado para avaliar um produto!");
       return;
     }
 
-    if (produto.ratings && produto.ratings.includes(user.userId)) {
+    if (produto.ratings && produto.ratings.includes(Number(user.userId))) {
       toast.warning("Você já avaliou este produto!");
       return;
     }
@@ -89,7 +101,7 @@ const Produto = () => {
       updatedProduto.feedbackNegativo += 1;
     }
     updatedProduto.ratings = updatedProduto.ratings || [];
-    updatedProduto.ratings.push(user.userId);
+    updatedProduto.ratings.push(Number(user.userId));
 
     axios
       .patch(`http://localhost:3000/produtos/${id}`, updatedProduto)
@@ -149,7 +161,7 @@ const Produto = () => {
         <Flex justifyContent="center" mt={8}>
           <Button
             colorScheme="green"
-            disabled={!user || (produto.ratings && produto.ratings.includes(user.userId))}
+            disabled={!user || (produto.ratings && produto.ratings.includes(Number(user.userId)))}
             onClick={() => handleRating("positive")}
             mr={4}
           >
@@ -157,7 +169,7 @@ const Produto = () => {
           </Button>
           <Button
             colorScheme="red"
-            disabled={!user || (produto.ratings && produto.ratings.includes(user.userId))}
+            disabled={!user || (produto.ratings && produto.ratings.includes(Number(user.userId)))}
             onClick={() => handleRating("negative")}
           >
             Não Gostei ({produto.feedbackNegativo})

@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { Box, Flex, Button } from "@chakra-ui/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa";
 import "./MainLayout.css";
+import React from "react";
 
-// eslint-disable-next-line react/prop-types
-const MainLayout = ({ children }) => {
+interface MainLayoutProps {
+  children: ReactNode;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const location = useLocation();
-  const isCarrinhoPage = location.pathname === "/carrinho";
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const isCarrinhoPage: boolean = location.pathname === "/carrinho";
+  const [cartItemCount, setCartItemCount] = useState<number>(0);
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName"); // Obtém o nome do localStorage
-  const isUserLoggedIn = !!userId;
+  const userId: string | null = localStorage.getItem("userId");
+  const userName: string | null = localStorage.getItem("userName");
+  const isUserLoggedIn: boolean = !!userId;
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const itemCount = cart.reduce((total, item) => total + Number(item.quantidade), 0);
+    const cart: Array<any> = JSON.parse(localStorage.getItem("carrinho") || '[]');
+    const itemCount: number = cart.reduce((total, item) => total + Number(item.quantidade), 0);
     setCartItemCount(itemCount);
   }, []);
 
